@@ -12,10 +12,10 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 # Page config
-st.set_page_config(page_title="Heart Disease Prediction", layout="wide")
+st.set_page_config(page_title="Heart Disease Prediction", page_icon="❤️", layout="wide")
 
 # Title
-st.title("Heart Disease Prediction System")
+st.title("❤️ Heart Disease Prediction System")
 st.markdown("---")
 
 # Load models
@@ -43,7 +43,7 @@ def preprocess_uploaded_data(df, label_encoders):
     return df
 
 # Sidebar
-st.sidebar.header("Model Selection")
+st.sidebar.header("📊 Model Selection")
 model_options = {
     "Logistic Regression": "logistic_regression",
     "Decision Tree": "decision_tree",
@@ -60,10 +60,10 @@ selected_model_key = model_options[selected_model_name]
 model_data = load_model(selected_model_key)
 
 if model_data:
-    st.sidebar.success(f"{selected_model_name} loaded successfully!")
+    st.sidebar.success(f"✅ {selected_model_name} loaded successfully!")
 
     # Display model metrics
-    st.sidebar.markdown(" Model Performance Metrics")
+    st.sidebar.markdown("### 📈 Model Performance Metrics")
     metrics = model_data['metrics']
     st.sidebar.metric("Accuracy", f"{metrics['accuracy']:.4f}")
     st.sidebar.metric("AUC Score", f"{metrics['auc']:.4f}")
@@ -72,13 +72,13 @@ if model_data:
     st.sidebar.metric("F1 Score", f"{metrics['f1']:.4f}")
     st.sidebar.metric("MCC Score", f"{metrics['mcc']:.4f}")
 else:
-    st.sidebar.error(f"{selected_model_name} not found. Please train the model first.")
+    st.sidebar.error(f"❌ {selected_model_name} not found. Please train the model first.")
 
 # Main content
-st.markdown(" Data Upload and Prediction")
+st.markdown("## 📁 Data Upload and Prediction")
 
 # Create sample test data
-st.markdown(" Download Test Data Template")
+st.markdown("### 📥 Download Test Data Template")
 if st.button("Download Sample Test Data"):
     sample_data = pd.DataFrame({
         'age': [63, 67, 45],
@@ -99,7 +99,7 @@ if st.button("Download Sample Test Data"):
 
     csv = sample_data.to_csv(index=False)
     st.download_button(
-        label="Download CSV",
+        label="📥 Download CSV",
         data=csv,
         file_name="test_data_sample.csv",
         mime="text/csv"
@@ -108,14 +108,14 @@ if st.button("Download Sample Test Data"):
 st.markdown("---")
 
 # File upload
-st.markdown("Upload Your Test Data")
+st.markdown("### 📤 Upload Your Test Data")
 uploaded_file = st.file_uploader("Upload CSV file with test data", type=['csv'])
 
 if uploaded_file and model_data:
     try:
         # Read uploaded file
         test_df = pd.read_csv(uploaded_file)
-        st.success(f"File uploaded successfully! Shape: {test_df.shape}")
+        st.success(f"✅ File uploaded successfully! Shape: {test_df.shape}")
 
         # Display uploaded data
         st.markdown("#### Uploaded Data Preview")
@@ -148,7 +148,7 @@ if uploaded_file and model_data:
 
         # Display predictions
         st.markdown("---")
-        st.markdown("Prediction Results")
+        st.markdown("### 🎯 Prediction Results")
 
         results_df = X_test.copy()
         results_df['Predicted_Class'] = predictions
@@ -161,7 +161,7 @@ if uploaded_file and model_data:
         # Download predictions
         csv_results = results_df.to_csv(index=False)
         st.download_button(
-            label="Download Predictions",
+            label="📥 Download Predictions",
             data=csv_results,
             file_name="predictions.csv",
             mime="text/csv"
@@ -170,7 +170,7 @@ if uploaded_file and model_data:
         # If target exists, show evaluation
         if has_target:
             st.markdown("---")
-            st.markdown("Model Evaluation on Uploaded Data")
+            st.markdown("### 📊 Model Evaluation on Uploaded Data")
 
             from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, matthews_corrcoef, roc_auc_score
 
@@ -189,7 +189,7 @@ if uploaded_file and model_data:
                 st.metric("AUC Score", f"{roc_auc_score(y_true, predictions_proba[:, 1]):.4f}")
 
             # Confusion Matrix
-            st.markdown("Confusion Matrix")
+            st.markdown("### 🔲 Confusion Matrix")
             cm = confusion_matrix(y_true, predictions)
 
             fig, ax = plt.subplots(figsize=(8, 6))
@@ -201,18 +201,18 @@ if uploaded_file and model_data:
             st.pyplot(fig)
 
             # Classification Report
-            st.markdown("Classification Report")
+            st.markdown("### 📋 Classification Report")
             report = classification_report(y_true, predictions, target_names=['No Disease', 'Disease'], output_dict=True)
             report_df = pd.DataFrame(report).transpose()
             st.dataframe(report_df.style.format("{:.4f}"))
 
     except Exception as e:
-        st.error(f"Error processing file: {str(e)}")
+        st.error(f"❌ Error processing file: {str(e)}")
         st.info("Please ensure your CSV file has the correct format and column names.")
 
 # Information section
 st.markdown("---")
-st.markdown("About This Application")
+st.markdown("### ℹ️ About This Application")
 st.info("""
 This application implements 6 machine learning classification models for heart disease prediction:
 1. **Logistic Regression** - Linear model for binary classification
@@ -226,4 +226,7 @@ This application implements 6 machine learning classification models for heart d
 - 920 instances with 13 features
 - Binary classification: Disease (1) vs No Disease (0)
 """)
+
+st.markdown("---")
+
 
